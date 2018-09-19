@@ -1,24 +1,33 @@
 close all;
 
+load('../lab_week2_data/lab1_1.mat');
+
+% initial decision criterion
 dc = 170;
 
-%set edges for histogram
-edges = min(min(length_men),min(length_women)):1:max(max(length_men),max(length_women));
+% set edges for histogram
+edges = min(min(length_men),min(length_women)):1:max(max(length_men), ...
+            max(length_women));
 
-%set data for histogram
+% set data for histogram
 h1 = histcounts(length_men,edges);
 h2 = histcounts(length_women,edges);
 
-%plot histograms
-figure(1)
-bar(edges(1:end-1),[h1; h2]')
+% plot histograms
+figure;
+bar(edges(1:end-1),[h1; h2]');
 grid on;
 
-%find optimal decision criterion
-%dc = decision criterion
-%mc = misclassifications
-optimal_dc = edges(1); %initialise with the first value
-optimal_mc = intmax; %represents infinity
+xlabel("body length (cm)");
+ylabel("nr. of occurrences (sample size = 200)");
+title("Body length of men and women");
+legend("men", "women");
+
+% find optimal decision criterion
+% dc : decision criterion
+% mc : misclassifications
+optimal_dc = edges(1); % initialise with the first value
+optimal_mc = intmax; % represents infinity
 
 for i = 1:length(edges)
     dc = edges(i);
@@ -34,6 +43,6 @@ for i = 1:length(edges)
     end
 end
 
-%print optimal decision criterion
+% print optimal decision criterion
 optimal_dc
 optimal_mc

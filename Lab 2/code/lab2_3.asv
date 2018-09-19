@@ -32,14 +32,7 @@ hd_norm = hamming_distance/30;
 set_S = zeros(1,1000);
 set_D = zeros(1,1000);
 
-
-%%load all files to avoid loading files 1000 times
-%data_matrix = zeros(20,20,30);
-%for i = 1:20
-%   temp = load(strcat(strcat(strcat(folder_name, data_name1), persons(i,:)), data_name2));
-%   data_matrix(i,:,:) = temp.iriscode;
-%end
-
+%Compute set S
 for i = 1:1000
     rand_file_num = randi(20);
     loaded_person_data = load(strcat(strcat(strcat(folder_name, data_name1), persons(rand_file_num,:)), data_name2));
@@ -50,23 +43,43 @@ for i = 1:1000
     row2 = loaded_person_data.iriscode(random_row_nr2,:);
     norm_hd = sum(bitxor(row1, row2))/30;
     set_S(i) = norm_hd;
+    
 end
 
+
+%Compute set D
 for i = 1:1000
     rand_file_num1 = randi(20);
     rand_file_num2 = randi(20);
     random_row_nr1 = randi(20);
     random_row_nr2 = randi(20);
     
+    %rand perm
     while rand_file_num1 == rand_file_num2
         rand_file_num2 = randi(20);
     end
     
+    %select person with random number
     loaded_person_data1 = load(strcat(strcat(strcat(folder_name, data_name1), persons(rand_file_num1,:)), data_name2));
     loaded_person_data2 = load(strcat(strcat(strcat(folder_name, data_name1), persons(rand_file_num2,:)), data_name2));
     
-    row1 = loaded_person_data1.iriscode(random_row_nr1);
-    row2 = loaded_person_data2.iriscode(random_row_nr2);
+    %read random row of random person
+    row1 = loaded_person_data1.iriscode(random_row_nr1, :);
+    row2 = loaded_person_data2.iriscode(random_row_nr2, :);
     norm_hd = sum(bitxor(row1, row2))/30;
+    
     set_D(i) = norm_hd;
 end
+
+%calculate mean and standard deviation
+mean_S = mean(set_S);
+mean_D = mean(set_D);
+std_S = std(set_S);
+std_D = std(set_D);
+
+%generate figure and histograms. histfit uses and calculates mean and std.
+%deviation of the sets itsel
+close all;
+figure; hold on;
+histfit(set_S);
+histfit(set_D);
