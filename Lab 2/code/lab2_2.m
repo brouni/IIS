@@ -2,10 +2,15 @@ close all;
 
 load('../lab_week2_data/lab1_2.mat');
 
+%======================================================================%
+
+% plot data
 figure; hold on;
 person_lengths = measurements(:,1);
 hair_lengths = measurements(:,2);
 plot(person_lengths, hair_lengths, 'k.')
+
+%======================================================================%
 
 % plot the median point of all data, in order to make an educated guess
 %  of the decision boundary
