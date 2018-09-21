@@ -29,7 +29,8 @@ random_row_nr2 = randi(20);
 
 data1 = loaded_person_data.iriscode;
 
-hamming_distance = sum(bitxor(data1(random_row_nr1,:), data1(random_row_nr2,:)));
+hamming_distance = sum(bitxor(data1(random_row_nr1,:), ...
+    data1(random_row_nr2,:)));
 hd_norm = hamming_distance/30;
 
 set_S = zeros(1,1000);
@@ -91,4 +92,6 @@ h_d(2).Color = [0 0 1];
 alpha(.5);
 xlabel("Hamming Distance (normalised)");
 ylabel("Nr. of occurrences (sample size = 1000)");
-title("");
+title("Normalised Hamming distances of compared iris scans");
+legend("set S", "Normal distribution set S", ...
+    "set D", "Normal distribution set D");
