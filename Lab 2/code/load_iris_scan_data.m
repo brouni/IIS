@@ -1,4 +1,6 @@
 function person_data = load_iris_scan_data(person_nr)
+%Loads iris scan data from disk. Does not contain a check to stop invalid
+%  input types or invalid input numbers.
 
 folder_name = '../lab_week2_data/';
 data_name1 = 'person';
@@ -20,5 +22,6 @@ end
 
 person_data = load(strcat(strcat(strcat(folder_name, data_name1),...
     str_person_nr), data_name2));
+person_data = person_data.iriscode;
 
 end

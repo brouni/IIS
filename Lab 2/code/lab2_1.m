@@ -2,7 +2,7 @@ close all;
 
 load('../lab_week2_data/lab1_1.mat');
 
-%========================================================================%
+%======================================================================%
 
 % set edges for histogram
 edges = min(min(length_men),min(length_women)):1:max(max(length_men), ...
