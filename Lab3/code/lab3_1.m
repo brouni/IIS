@@ -20,7 +20,7 @@ plot(l, posterior_salmon, 'b-');
 xlabel('length (cm)');
 ylabel('posterior probability');
 title('Posterior probabilities of sea bass and salmon');
-legend('seabass', 'salmon');
+legend('sea bass', 'salmon');
 
 %========================== 1.2 ================================%
 % get posterior probabilities for lengths 8 and 20

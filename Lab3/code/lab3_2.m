@@ -5,14 +5,22 @@ load('../lab_week3_data/normdist.mat');
 %========================== 2.1 ================================%
 % create plot
 figure; hold on;
+
+% create plot handles for legend items
+h = zeros(3,1);
+h(1) = plot(nan, nan, 'bo');
+h(2) = plot(nan, nan, 'ro');
+h(3) = plot(nan, nan, 'ks');
+
 plot(S1, zeros(30), 'bo');
 plot(S2, zeros(15)+1, 'ro');
 plot(T, zeros(5)+2, 'ks');
+
 % Remove unnecessary y-axis ticks.
 set(gca,'YTickLabel',[]);
 set(gca,'YTick',[]);
 title('Set 1, Set 2, Test set');
-legend('Set 1', 'Set 2', 'Test set');
+legend(h, 'Set 1', 'Set 2', 'Test set');
 
 %========================== 2.2 ================================%
 % compute mean and standard deviation of S1 and S2
@@ -29,13 +37,22 @@ pdf_S1 = normpdf(x_values, mu_hat_S1, sigma_hat_S1);
 pdf_S2 = normpdf(x_values, mu_hat_S2, sigma_hat_S2);
 
 figure; hold on;
+
+% create plot handles for legend items
+h = zeros(4,1);
+h(1) = plot(nan, nan, 'b-');
+h(2) = plot(nan, nan, 'r-');
+h(3) = plot(nan, nan, 'bo');
+h(4) = plot(nan, nan, 'ro');
+
+
 plot(x_values, pdf_S1, 'b-');
 plot(x_values, pdf_S2, 'r-');
 plot(S1, zeros(30), 'bo');
 plot(S2, zeros(15), 'ro');
 ylabel('class conditional probability density');
 title('Class conditional probability densities of Set 1 and Set 2');
-legend('CCPD S_1', 'CCPD S_1', 'S_1', 'S_2');
+legend(h, 'CCPD S_1', 'CCPD S_1', 'S_1', 'S_2');
 
 %========================== 2.3 ================================%
 % compute a priori probabilities
@@ -43,19 +60,27 @@ prior_S1 = length(S1)/(length(S1)+length(S2))
 prior_S2 = length(S2)/(length(S1)+length(S2))
 
 %========================== 2.4 ================================%
-% create plot
+
 figure; hold on;
+
+% create plot handles for legend items
+h = zeros(5,1);
+h(1) = plot(nan, nan, 'b-');
+h(2) = plot(nan, nan, 'r-');
+h(3) = plot(nan, nan, 'bo');
+h(4) = plot(nan, nan, 'ro');
+h(5) = plot(nan, nan, 'ks');
+
+% create plot
 plot(x_values, prior_S1*pdf_S1, 'b-');
 plot(x_values, prior_S2*pdf_S2, 'r-');
 plot(S1, zeros(30), 'bo');
 plot(S2, zeros(15), 'ro');
 plot(T, zeros(5)+0.007, 'ks');
-%ylabel('P(\omega_i)p(x|\omega_i)');
-%title('P(\omega_1)p(x|\omega_1), P(\omega_2)p(x|\omega_2), S1, S2 and T');
 ylabel('non-normalised posterior probability');
 title(['Non-normalised posterior probabilities with' ...
   ' original and Test data']);
-legend('NNPP S_1', 'NNPP S_2', 'S_1', 'S_2', 'T');
+legend(h, 'NNPP S_1', 'NNPP S_2', 'S_1', 'S_2', 'T');
 
 %========================== 2.5 ================================%
 
@@ -95,7 +120,16 @@ end
 
 %========================== 2.6 ================================%
 % create plot
+% create plot handles for legend items
 figure; hold on;
+h = zeros(6,1);
+h(1) = plot(nan, nan, 'b-');
+h(2) = plot(nan, nan, 'r-');
+h(3) = plot(nan, nan, 'bo');
+h(4) = plot(nan, nan, 'ro');
+h(5) = plot(nan, nan, 'ks');
+h(6) = plot(nan, nan, 'k-');
+
 plot(x_values, prior_S1*pdf_S1, 'b-');
 plot(x_values, prior_S2*pdf_S2, 'r-');
 plot(S1, zeros(30), 'bo');
@@ -106,7 +140,7 @@ plot([x_2 x_2], [0 0.014], 'k-');
 ylabel('non-normalised posterior probability');
 title(['Non-normalised posterior probabilities with' 10 ...
 'original data, Test data, and decision criterions']);
-legend('NNPP S_1', 'NNPP S_2', 'S_1', 'S_2', 'T', 'DC');
+legend(h, 'NNPP S_1', 'NNPP S_2', 'S_1', 'S_2', 'T', 'DC');
 
 %========================== 2.7 ================================%
 %error rate S1
