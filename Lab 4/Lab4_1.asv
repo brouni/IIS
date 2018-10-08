@@ -2,12 +2,18 @@ close all;
 load('lab_4_data/dataAEX.mat');
 load('lab_4_data/labelsAEX.mat');
 
-
-aex_linkage = linkage(data,'average');
+aex_linkage = linkage(data);
 dendrogram(aex_linkage,'Labels', labels,'Orientation','right');
-ylabel('non-normalised posterior probability');
+ylabel('Dutch stock index abreviations');
+xlabel('Cluster distances');
+title('Cluster distances by Dutch stock indices (with AEX)');
 
-title(['Non-normalised posterior probabilities with' 10 
+
+figure; hold on;
+dendrogram(linkage(data(1:18, :)), 'Labels', labels(1:18), 'Orientation', 'right');
+ylabel('Dutch stock index abreviations');
+xlabel('Cluster distances');
+title('Cluster distances by Dutch stock indices');
     
 % aex_linkage
 
