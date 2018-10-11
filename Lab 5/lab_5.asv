@@ -28,17 +28,34 @@ colour_init_4 = (magenta + white*2)./3;
 % Initialise variables.
 [P, N] = size(data);
 K = 4;
-learning_rate = 0.1;
+learning_rate = 0.01;
 t_max = 100;
 
 prototypes_over_time = zeros(t_max, K, N);
-H_VQ_over_time = zeros(t_max, 1);
+H_VQ_over_time = zeros(t_max+1, 1);
 
 % Initialise prototypes
 prototypes = zeros(K, N);
 for i = 1:K
     prototypes(i, :) = data(randi(P), :);
 end
+
+
+% Compute initial H_VQ
+for j = randperm(P)
+    example = data(j, :);
+    
+    winner_distance = intmax;
+    for k = 1:K
+        prototype = prototypes(k, :);
+        distance = pdist([example; prototype]);
+        if distance < winner_distance
+            winner_distance = distance;
+        end
+    end
+    H_VQ_over_time(1) = H_VQ_over_time(1) + winner_distance/P;
+end
+
 
 % Permutations
 for t = 1:t_max
@@ -72,10 +89,10 @@ for t = 1:t_max
   
   % store prototypes and quantisation error for this iteration
   prototypes_over_time(t, :, :) = prototypes;
-  H_VQ_over_time(t) = H_VQ;
+  H_VQ_over_time(t+1) = H_VQ;
   
   % normalise H_VQ
-  H_VQ_over_time(t) = H_VQ_over_time(t)/P;
+  H_VQ_over_time(t+1) = H_VQ_over_time(t+1)/P;
 end
 
 % plot prototypes and data over time
@@ -83,7 +100,7 @@ end
 figure; hold on;
 
 % plot data points
-plot(data(:, 1), data(:, 2), 'ksq');
+data_plot = plot(data(:, 1), data(:, 2), 'ksq');
 
 % plot next iterations with an increasingly coloured line
 for t = 2:t_max-1
@@ -127,25 +144,28 @@ end
 
 % title and legend
 title('Prototypes over time');
-legend_plots = zeros(2*K, 1);
-legend_plots(1) = plot(nan, nan, 'ro', 'MarkerFaceColor', colour_init_1);
-legend_plots(2) = plot(nan, nan, 'ro', 'MarkerFaceColor', red);
-legend_plots(3) = plot(nan, nan, 'go', 'MarkerFaceColor', colour_init_2);
-legend_plots(4) = plot(nan, nan, 'go', 'MarkerFaceColor', green);
+legend_plots = zeros(2*K+1, 1);
+legend_plots(1) = data_plot;
+legend_plots(2) = plot(nan, nan, 'ro', 'MarkerFaceColor', colour_init_1);
+legend_plots(3) = plot(nan, nan, 'ro', 'MarkerFaceColor', red);
+legend_plots(4) = plot(nan, nan, 'go', 'MarkerFaceColor', colour_init_2);
+legend_plots(5) = plot(nan, nan, 'go', 'MarkerFaceColor', green);
 if K == 2
-  legend(legend_plots, 'Cluster Init', 'Cluster 1', 'Cluster 2');
+  legend(legend_plots, 'Data points', 'P_1 Init', 'P_1', ...
+      'P_2 Init', 'P_2');
 else
-  legend_plots(5) = 
-  legend_plots(6) = plot(nan, nan, 'bo', 'MarkerFaceColor', blue);
-  legend_plots(8) = plot(nan, nan, 'mo', 'MarkerFaceColor', magenta);
-  legend(legend_plots, 'Cluster Init', 'Cluster 1', 'Cluster 2', ...
-      'Cluster 3', 'Cluster 4');
+  legend_plots(6) = plot(nan, nan, 'bo', 'MarkerFaceColor', colour_init_3);
+  legend_plots(7) = plot(nan, nan, 'bo', 'MarkerFaceColor', blue);
+  legend_plots(8) = plot(nan, nan, 'mo', 'MarkerFaceColor', colour_init_4);
+  legend_plots(9) = plot(nan, nan, 'mo', 'MarkerFaceColor', magenta);
+  legend(legend_plots, 'Data points', 'P_1 Init', 'P_1', ...
+      'P_2 Init', 'P_2', 'P_3 Init', 'P_3', ...
+      'P_4 Init', 'P_4');
 end
-
 
 % plot quantisation error over time
 figure; hold on;
-plot(1:t_max, H_VQ_over_time, 'k-');
+plot(1:t_max+1, H_VQ_over_time, 'k-');
 ylabel('Normalised Quantisation Error');
-xlabel('Time');
+xlabel('Time (epoch)');
 title('Normalised Quantisation Error over time');
