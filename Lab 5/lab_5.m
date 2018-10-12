@@ -28,7 +28,7 @@ colour_init_4 = (magenta + white*2)./3;
 % Initialise variables.
 [P, N] = size(data);
 K = 2;
-learning_rate = 0.1;
+learning_rate = 0.0001;
 t_max = 100;
 
 prototypes_over_time = zeros(t_max, K, N);
