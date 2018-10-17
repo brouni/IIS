@@ -115,27 +115,30 @@ E_over_time = E_over_time./rows.*100;
 
 % Plots
 figure; hold on;
-lgd_string = cell(NR_OF_CLASSES+2, 1);
+% lgd_string = cell(NR_OF_CLASSES+2, 1);
 
 plot(data(1:50, 1), data(1:50, 2), 'ko', 'MarkerFaceColor', [0 0 0], ...
   'DisplayName', 'Class_1');
 plot(data(51:rows, 1), data(51:rows, 2), 'ko', ...
   'MarkerFaceColor', [1 1 1], 'DisplayName', 'Class_2');
-
+i = 0;
 for t = 1:t_max
-  for c = 1:NR_OF_CLASSES
-    for k = 1:K
-      if t == t_max && k == K
+  for c = 0:NR_OF_CLASSES-1
+    for k = 0:K-1
+      % Make sure only the final prototypes are used in the legend
+      if t == t_max && k == K-1
         handle_visibility = 'on';
       else
         handle_visibility = 'off';
       end
-      plot(prototypes_over_time(t, k+c-1, 1), ...
-        prototypes_over_time(t, k+c-1, 2), 'o', 'MarkerFaceColor', ...
-        [(prototypes_over_time(t,k+c-1,3) == 0) * (t/t_max/2 + .25), ...
-         (prototypes_over_time(t,k+c-1,3) ~= 0) * (t/t_max/2 + .25), ...
+      
+      row_nr = c*K + k + 1;
+      plot(prototypes_over_time(t, row_nr, 1), ...
+        prototypes_over_time(t, row_nr, 2), 'o', 'MarkerFaceColor', ...
+        [(prototypes_over_time(t, row_nr,3) == 0) * (t/t_max/2 + .25), ...
+         (prototypes_over_time(t, row_nr,3) ~= 0) * (t/t_max/2 + .25), ...
         0], 'HandleVisibility', handle_visibility, ...
-        'DisplayName', strcat('P_', num2str(c))');
+        'DisplayName', strcat('P_', num2str(c+1))');
     end
   end
 end

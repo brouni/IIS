@@ -115,29 +115,36 @@ E_over_time = E_over_time./rows.*100;
 
 % Plots
 figure; hold on;
-plot(data(1:50, 1), data(1:50, 2), 'ko', 'MarkerFaceColor', [0 0 0]);
-plot(data(51:rows, 1), data(51:rows, 2), 'ko', 'MarkerFaceColor', [1 1 1]);
-lgd_string = zeros(NR_OF_CLASSES+2, 1);
-lgd_string(1) = 'Class_1';
-lgd_string(2) = 'Class_2';
+% lgd_string = cell(NR_OF_CLASSES+2, 1);
+
+plot(data(1:50, 1), data(1:50, 2), 'ko', 'MarkerFaceColor', [0 0 0], ...
+  'DisplayName', 'Class_1');
+plot(data(51:rows, 1), data(51:rows, 2), 'ko', ...
+  'MarkerFaceColor', [1 1 1], 'DisplayName', 'Class_2');
+i = 0;
 for t = 1:t_max
-  for c = 1:NR_OF_CLASSES
+  for c = 0:NR_OF_CLASSES-1
     for k = 1:K
-      plot(prototypes_over_time(t, k+c-1, 1), ...
-        prototypes_over_time(t, k+c-1, 2), 'o', 'MarkerFaceColor', ...
-        [(prototypes_over_time(t,k+c-1,3) == 0) * (t/t_max/2 + .25), ...
-         (prototypes_over_time(t,k+c-1,3) ~= 0) * (t/t_max/2 + .25), ...
-        0]);
-      % Add name to lgd_string only once
-      if k == 1
-        lgd_string(c+2) = strcat('P_', n(c));
+      % Set visibil
+      if t == t_max && k == K
+        handle_visibility = 'on';
+      else
+        handle_visibility = 'off';
       end
+      
+      row_nr = c*NR_OF_CLASSES + k;
+      plot(prototypes_over_time(t, row_nr, 1), ...
+        prototypes_over_time(t, row_nr, 2), 'o', 'MarkerFaceColor', ...
+        [(prototypes_over_time(t, row_nr,3) == 0) * (t/t_max/2 + .25), ...
+         (prototypes_over_time(t, row_nr,3) ~= 0) * (t/t_max/2 + .25), ...
+        0], 'HandleVisibility', handle_visibility, ...
+        'DisplayName', strcat('P_', num2str(c))');
     end
   end
 end
 title('Prototypes over time');
-lgd = legend;
-lgd.String = [];
+lgd = legend('show');
+hold off;
 
 figure; hold on;
 plot(1:t_max+1, E_over_time, 'k-');
@@ -146,3 +153,4 @@ plot(1, 100, 'w');
 xlabel('Time (epochs)');
 ylabel('Misclassification rate (%)');
 title('Misclassification rate over time');
+hold off;
