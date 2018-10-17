@@ -20,7 +20,7 @@ rng('default');
 
 % initialise prototypes
 NR_OF_CLASSES = 2;
-K = 2; % prototypes per class
+K = 1; % prototypes per class
 
 prototypes = zeros(NR_OF_CLASSES * K, cols+1);
 
@@ -148,8 +148,8 @@ hold off;
 
 figure; hold on;
 plot(1:t_max+1, E_over_time, 'k-');
-plot(1, 0, 'w');
-plot(1, 100, 'w');
+plot(1, 10, 'w');
+plot(1, 30, 'w');
 xlabel('Time (epochs)');
 ylabel('Misclassification rate (%)');
 title('Misclassification rate over time');
