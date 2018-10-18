@@ -2,6 +2,8 @@
 clear all;
 close all;
 
+
+%=========================== Initialisation ===========================%
 % load data
 d = load('data_lvq.mat');
 d = d.w5_1;
@@ -26,15 +28,15 @@ prototypes = zeros(NR_OF_CLASSES * K, cols+1);
 
 temp_order_class_1 = randperm(50, K);
 temp_order_class_2 = randperm(rows-50, K)+50;
-for i = 1:K
+for i = 1:K  % get K random data points per class to assign to prototypes
   prototypes(i, :) = data(temp_order_class_1(i), :);
   prototypes(i+K, :) = data(temp_order_class_2(i), :);
 end
 
-initial_prototypes = prototypes; %For debugging
-
 prototypes_over_time = zeros(t_max, NR_OF_CLASSES * K, cols+1);
 E_over_time = zeros(t_max+1,1);
+
+%========================= Actual computation =========================%
 
 % Compute initial E
 E_over_time(1) = 0;
@@ -113,9 +115,8 @@ end
 E_over_time = E_over_time./rows.*100;
 
 
-% Plots
+%=============================== Plots ===============================%
 figure; hold on;
-% lgd_string = cell(NR_OF_CLASSES+2, 1);
 
 plot(data(1:50, 1), data(1:50, 2), 'ko', 'MarkerFaceColor', [0 0 0], ...
   'DisplayName', 'Class_1');
@@ -135,6 +136,9 @@ for t = 1:t_max
       row_nr = c*K + k + 1;
       plot(prototypes_over_time(t, row_nr, 1), ...
         prototypes_over_time(t, row_nr, 2), 'o', 'MarkerFaceColor', ...
+        %{
+        Dynamically set gradient colour, depending on t and prototype class
+        %}
         [(prototypes_over_time(t, row_nr,3) == 0) * (t/t_max/2 + .25), ...
          (prototypes_over_time(t, row_nr,3) ~= 0) * (t/t_max/2 + .25), ...
         0], 'HandleVisibility', handle_visibility, ...
@@ -148,7 +152,7 @@ hold off;
 
 figure; hold on;
 plot(1:t_max+1, E_over_time, 'k-');
-plot(1, 10, 'w');
+plot(1, 10, 'w');  % Scaling for readibility purposes.
 plot(1, 30, 'w');
 xlabel('Time (epochs)');
 ylabel('Misclassification rate (%)');
