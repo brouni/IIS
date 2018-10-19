@@ -2,7 +2,6 @@
 clear all;
 close all;
 
-
 %=========================== Initialisation ===========================%
 % load data
 d = load('data_lvq.mat');
@@ -22,7 +21,7 @@ rng('default');
 
 % initialise prototypes
 NR_OF_CLASSES = 2;
-K = 1; % prototypes per class
+K = 2; % prototypes per class
 
 prototypes = zeros(NR_OF_CLASSES * K, cols+1);
 
